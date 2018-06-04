@@ -1,1 +1,0 @@
-# lumen-laravel-dummy-api
