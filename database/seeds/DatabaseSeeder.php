@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,6 +13,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call('UsersTableSeeder');
+        // Disable foreign key checking because truncate() will fail
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+
+        User::truncate();
+        $this->call(UsersTableSeeder::class);
+        $this->call(OauthClientsTableSeeder::class);
+
+        // Enable it back
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

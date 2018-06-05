@@ -3,7 +3,8 @@
 namespace App\Providers;
 
 use App\User;
-use Illuminate\Support\Facades\Gate;
+use Carbon\Carbon;
+use Dusterio\LumenPassport\LumenPassport;
 use Illuminate\Support\ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -35,5 +36,8 @@ class AuthServiceProvider extends ServiceProvider
                 return User::where('api_token', $request->input('api_token'))->first();
             }
         });
+
+        LumenPassport::routes($this->app);
+        LumenPassport::tokensExpireIn(Carbon::now()->addMinute(10));
     }
 }

@@ -11,6 +11,11 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+$router->group(['prefix' => '/', 'middleware' => 'client', 'as' => 'users', 'namespace' => 'Api'], function () use ($router) {
+    $router->post('/register', ['as' => 'register', 'uses' => 'UserController@create']);
+});
+
+$router->group(['prefix' => 'users', 'middleware' => 'auth:api', 'as' => 'users'], function () use ($router) {
+    $router->get('/', ['as' => 'index', 'uses' => 'UserController@index']);
+    $router->put('/{user}/update', ['as' => 'update', 'uses' => 'UserController@update']);
 });

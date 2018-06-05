@@ -67,6 +67,20 @@ $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
 ]);
 
+$app->routeMiddleware([
+    'client' => \App\Http\Middleware\CheckOnlyClientCredentials::class,
+]);
+
+/*
+|--------------------------------------------------------------------------
+| Load Configuration files
+|--------------------------------------------------------------------------
+|
+| Load the config in bootstrap/app.php since Lumen doesn't load config files automatically:
+|
+*/
+$app->configure('auth');
+
 /*
 |--------------------------------------------------------------------------
 | Register Service Providers
@@ -81,6 +95,23 @@ $app->routeMiddleware([
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
+$app->register(Appzcoder\LumenRoutesList\RoutesCommandServiceProvider::class);
+
+//make command
+$app->register(MichaelB\LumenMake\LumenMakeServiceProvider::class); // <- Add this
+
+//Form validation feature
+$app->register(Urameshibr\Providers\FormRequestServiceProvider::class);
+
+// Optionally, if you don't want it to affect load times in production,
+// you can load it conditionally
+if (env('APP_ENV') != 'production' || env('APP_ENV') == 'local') {
+    $app->register(MichaelB\LumenMake\LumenMakeServiceProvider::class);
+}
+
+// Finally register two service providers - original one and Lumen adapter
+$app->register(Laravel\Passport\PassportServiceProvider::class);
+$app->register(Dusterio\LumenPassport\PassportServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
