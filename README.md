@@ -3,6 +3,16 @@ Dummy lumen api so yo can test your client applications, just for practice
 
 The project is actually using the Laravel Passport library that means that the auth system that is being used is **Oauth2** 
 
+#Server Requirements
+**PHP** 
+
+    PHP >= 7.1.3
+    OpenSSL PHP Extension
+    PDO PHP Extension
+    Mbstring PHP Extension
+
+MySQL Version 5.7.22
+
 # Deploy
 
 ```sh
