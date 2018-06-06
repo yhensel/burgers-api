@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Lumen\Auth\Authorizable;
 use Laravel\Passport\HasApiTokens;
+use Illuminate\Database\Eloquent\Builder;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract
 {
@@ -46,5 +47,22 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         }
 
         return false;
+    }
+
+    /***
+     * Search by name and email
+     *
+     * @param Builder $query
+     * @param string $value
+     *
+     * @return Builder
+     */
+    public function scopeSearch(Builder $query, string $value)
+    {
+        $like = '%'.$value.'%';
+
+        return $query
+            ->where('name', 'like', $like)
+            ->orWhere('email', 'like', $like);
     }
 }

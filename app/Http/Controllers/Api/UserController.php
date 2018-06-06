@@ -27,9 +27,13 @@ class UserController extends Controller
         $this->validator = $validator;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        dd('here');
+        if ($request->has('search')) {
+            return User::search($request->input('search'))->paginate(9);
+        }
+
+        return User::paginate(9);
     }
 
     public function show($userId)
