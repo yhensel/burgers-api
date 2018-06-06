@@ -13,7 +13,7 @@ class UserRequestValidator extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function __construct(Request $request, $requestMethod)
+    public function doValidation(Request $request, $requestMethod)
     {
         if ($requestMethod == 'create') {
             $this->doPostValidation($request);
@@ -21,6 +21,10 @@ class UserRequestValidator extends Controller
 
         if ($requestMethod == 'update') {
             $this->doPutValidation($request);
+        }
+
+        if ($requestMethod == 'delete') {
+            $this->doDeleteValidation($request);
         }
     }
 
@@ -51,6 +55,18 @@ class UserRequestValidator extends Controller
             'password'         => 'required',
             'new_password'     => 'sometimes',
             'confirm_password' => 'required_with:new_password',
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    private function doDeleteValidation(Request $request)
+    {
+        $this->validate($request, [
+            'password'         => 'required',
         ]);
     }
 }

@@ -7,15 +7,24 @@ use App\Http\RequestValidators\UserRequestValidator;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
+    /**
+     * @var UserRepository
+     */
     protected $repository;
 
-    public function __construct(UserRepository $repository)
+    /**
+     * @var UserRequestValidator
+     */
+    protected $validator;
+
+    public function __construct(UserRepository $repository, UserRequestValidator $validator)
     {
         $this->repository = $repository;
+        $this->validator = $validator;
     }
 
     public function index()
@@ -23,9 +32,8 @@ class UserController extends Controller
         dd('here');
     }
 
-    public function show($id)
+    public function show($userId)
     {
-        //
     }
 
     /**
@@ -37,12 +45,11 @@ class UserController extends Controller
      */
     public function create(Request $request)
     {
-        dd('here');
-        (new UserRequestValidator($request, 'create'));
+        $this->validator->doValidation($request, 'create');
 
         $user = $this->repository->create($request);
 
-        return $user->save() ? $this->success($user, 200) : $this->error('cant create the user', '400');
+        return $user->save() ? $this->success($user, 201) : $this->error('Can\'t create the user', '400');
     }
 
     /**
@@ -55,21 +62,41 @@ class UserController extends Controller
      */
     public function update(Request $request, $userId)
     {
-        (new UserRequestValidator($request, 'update'));
+        $this->validator->doValidation($request, 'update');
 
         $user = User::find($userId);
 
-        if (Hash::check($request->input('password'), $user->password)) {
+        if ($user->checkPassword($request->input('password'))) {
             $user = $this->repository->update($request, $user);
 
-            return $user->save() ? $this->success($user, 200) : $this->error('cant create the user', '400');
-        } else {
-            return $this->error('cant update the user: wrong password', '400');
+            return $user->save() ? $this->success($user, 200) : $this->error('Can\'t create the user', '400');
         }
+
+        return $this->error('Can\'t update the user: wrong password', 403);
     }
 
-    public function destroy($id)
+    /**
+     * @param Request $request
+     * @param $userId
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(Request $request, $userId)
     {
-        //
+        $this->validator->doValidation($request, 'delete');
+
+        $user = User::find($userId);
+
+        if ($user->checkPassword($request->input('password'))) {
+            DB::transaction(function () use ($user) {
+                $user->delete();
+            });
+
+            return $this->success($user, 200);
+        }
+
+        return $this->error('Credentials are incorrect', 401);
     }
 }
