@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UserController extends Controller
 {
@@ -36,8 +37,16 @@ class UserController extends Controller
         return User::paginate(9);
     }
 
+    /**
+     * @param $userId
+     *
+     * @throws NotFoundHttpException
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function show($userId)
     {
+        return $this->success(User::findOrFail($userId), 200);
     }
 
     /**

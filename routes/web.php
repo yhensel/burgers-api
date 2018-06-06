@@ -17,6 +17,7 @@ $router->group(['prefix' => '/', 'middleware' => 'client', 'as' => 'users', 'nam
 
 $router->group(['prefix' => 'users', 'middleware' => 'auth:api', 'as' => 'users', 'namespace' => 'Api'], function () use ($router) {
     $router->get('/', ['as' => 'index', 'uses' => 'UserController@index']);
+    $router->get('/{user}/show', ['as' => 'show', 'uses' => 'UserController@show']);
     $router->put('/{user}/update', ['as' => 'update', 'uses' => 'UserController@update']);
     $router->delete('/{user}/delete', ['as' => 'destroy', 'uses' => 'UserController@destroy']);
 });

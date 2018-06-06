@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Lumen\Auth\Authorizable;
 use Laravel\Passport\HasApiTokens;
-use Illuminate\Database\Eloquent\Builder;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract
 {
@@ -50,10 +50,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /***
-     * Search by name and email
+     * Search by name and email.
      *
      * @param Builder $query
-     * @param string $value
+     * @param string  $value
      *
      * @return Builder
      */
