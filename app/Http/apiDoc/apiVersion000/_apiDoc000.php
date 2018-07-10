@@ -4,7 +4,7 @@
  * @apiDefine BearerToken
  *
  *
- * @apiHeader Authorization='Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImMyZmE2ZTJiNjdlYzg5YTgyMjY2ZmFmOTE0MzE3YWJhNTFiNzBkNjhlZmJjMGJlMTkzNTBiOGQ0Yzg1Zj...' Bearer Token remember to add the 'Bearer prefix'
+ * @apiHeader Authorization='Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI...' Bearer Token remember to add the 'Bearer prefix'
  */
 
 /**
