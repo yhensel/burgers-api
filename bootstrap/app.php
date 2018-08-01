@@ -59,9 +59,10 @@ $app->singleton(
 |
 */
 
-// $app->middleware([
-//    App\Http\Middleware\ExampleMiddleware::class
-// ]);
+$app->middleware([
+    App\Http\Middleware\ExampleMiddleware::class,
+    \Barryvdh\Cors\HandleCors::class,
+]);
 
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
@@ -70,6 +71,8 @@ $app->routeMiddleware([
 $app->routeMiddleware([
     'client' => \App\Http\Middleware\CheckOnlyClientCredentials::class,
 ]);
+
+$app->configure('cors');
 
 /*
 |--------------------------------------------------------------------------
@@ -112,6 +115,7 @@ if (env('APP_ENV') != 'production' || env('APP_ENV') == 'local') {
 // Finally register two service providers - original one and Lumen adapter
 $app->register(Laravel\Passport\PassportServiceProvider::class);
 $app->register(Dusterio\LumenPassport\PassportServiceProvider::class);
+$app->register(Barryvdh\Cors\ServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
